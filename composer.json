@@ -18,12 +18,8 @@
     },
     "require": {
         "php": ">=7.3",
-        "simplesamlphp/composer-module-installer": "~1.1",
         "simplesamlphp/simplesamlphp": "^1.19.0",
-        "ext-pdo": "*",
-        "webmozart/assert": "^1.9.1",
-      "ext-json": "*",
-      "ext-dom": "*"
+        "webmozart/assert": "^1.9.1"
     },
     "support": {
         "issues": "https://github.com/faragom/simplesamlphp-module-samlroutesp/issues",
