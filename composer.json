@@ -1,0 +1,38 @@
+{
+    "name": "faragom/simplesamlphp-module-samlroutesp",
+    "description": "SimpleSAMLphp module that extends SAML SP authsource to implement remote SP to remote IDP routing in proxy mode",
+    "type": "simplesamlphp-module",
+    "keywords": ["simplesamlphp", "SAML", "proxy", "routing", "RedIRIS"],
+    "license": "GPL-3.0-only",
+    "authors": [
+        {
+            "name": "Francisco Aragó",
+			"email": "francisco.arago@externos.rediris.es"
+        }
+    ],
+    "config": {
+        "preferred-install": {
+            "simplesamlphp/simplesamlphp": "source",
+            "*": "dist"
+        }
+    },
+    "require": {
+        "php": ">=7.3",
+        "simplesamlphp/composer-module-installer": "~1.1",
+        "simplesamlphp/simplesamlphp": "^1.19.0",
+        "ext-pdo": "*",
+        "webmozart/assert": "^1.9.1",
+      "ext-json": "*",
+      "ext-dom": "*"
+    },
+    "support": {
+        "issues": "https://github.com/faragom/simplesamlphp-module-samlroutesp/issues",
+        "source": "https://github.com/faragom/simplesamlphp-module-samlroutesp"
+    },
+	"repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/faragom/simplesamlphp-module-samlroutesp"
+        }
+    ]
+}

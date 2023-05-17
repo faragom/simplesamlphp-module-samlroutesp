@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="27de2bf9-6f97-44be-831c-fee9d3cea5a1" name="Default Changelist" comment="" />
+    <list default="true" id="27de2bf9-6f97-44be-831c-fee9d3cea5a1" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/Auth/Source/samlRouteSP.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -9,6 +14,9 @@
   </component>
   <component name="ComposerSettings">
     <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="2Pv3eKX0yVJ2HgRCY57O0nDtoZ0" />
   <component name="ProjectViewState">
@@ -18,11 +26,12 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../simplesamlphp-module-samlRouteSP" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Francisco Aragó\PhpstormProjects\simplesamlphp-module-samlRouteSP" />
+      <recent name="C:\Users\Francisco Aragó\PhpstormProjects\simplesamlphp-module-samlroutesp" />
+      <recent name="C:\Users\Francisco Aragó\PhpstormProjects\simplesamlphp-module-samlroutesp\lib\Auth\Source" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -34,6 +43,7 @@
       <option name="presentableId" value="Default" />
       <updated>1684323821667</updated>
       <workItem from="1684323822708" duration="593000" />
+      <workItem from="1684325138376" duration="350000" />
     </task>
     <servers />
   </component>
