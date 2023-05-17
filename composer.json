@@ -1,5 +1,5 @@
 {
-    "name": "faragom/simplesamlphp-module-samlroutesp",
+    "name": "simplesamlphp/simplesamlphp-module-samlroutesp",
     "description": "SimpleSAMLphp module that extends SAML SP authsource to implement remote SP to remote IDP routing in proxy mode",
     "type": "simplesamlphp-module",
     "keywords": ["simplesamlphp", "SAML", "proxy", "routing", "RedIRIS"],
