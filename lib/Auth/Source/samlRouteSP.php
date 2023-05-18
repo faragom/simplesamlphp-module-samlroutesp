@@ -9,6 +9,10 @@ namespace SimpleSAML\Module\samlroutesp\Auth\Source;
 use Exception;
 use SimpleSAML\Configuration;
 use SimpleSAML\Logger;
+use SimpleSAML\Metadata\MetaDataStorageHandler;
+use SimpleSAML\Module\saml\Error\NoAvailableIDP;
+use SimpleSAML\Module\saml\Error\NoSupportedIDP;
+use SAML2\Constants;
 
 
 
@@ -21,14 +25,6 @@ class samlRouteSP extends \SimpleSAML\Module\saml\Auth\Source\SP
      * @var string[]
      */
     private $routes = [];
-
-
-    /**
-     * The IdP the user is allowed to log into from any SP, as defined in the authsource.
-     *
-     * @var string|null  The IdP the user can log into, or null if we check the mappings.
-     */
-    private $staticidp;
 
 
     /**
@@ -53,10 +49,6 @@ class samlRouteSP extends \SimpleSAML\Module\saml\Auth\Source\SP
 
         // We load the map of routes from the config, being routes[SPentityid] => [IDPentityID]
         $this->routes = $metadata->getArray('routes',[]);
-
-        //We check the authsource config, to see if there is a fixed IDP. If there is, we avoid mapping  // TODO: is this the behaviour we want? or mapping does override all?
-        $this->staticidp = $metadata->getString('idp', null);
-
     }
 
 
@@ -68,8 +60,9 @@ class samlRouteSP extends \SimpleSAML\Module\saml\Auth\Source\SP
      * original implementation it overloads saves the information about the login,
      * and redirects to the IdP.
      *
-     * @param array &$state  Information about the current authentication.
+     * @param array &$state Information about the current authentication.
      * @return void
+     * @throws NoSupportedIDP|NoAvailableIDP
      */
     public function authenticate(&$state)
     {
@@ -78,26 +71,44 @@ class samlRouteSP extends \SimpleSAML\Module\saml\Auth\Source\SP
 
         // The remote SP entityID
         $sp = $state['SPMetadata']['entityid'];
+
         $idp = '';
-
-        // If idp config item is set, it overrides the behaviour of this
-        if( isset($this->staticidp))
-            Logger::debug('[samlRouteSP] idp parameter at the authsource is set '.$this->staticidp.': overriding any mapping');
-        else {
-
-            // If the SP is routed to a specific IdP
-            if(array_key_exists($sp, $this->routes))
-                $idp = $this->routes[$sp];
-
-            // TODO: check that the idp exists or throw a specific routing
-            //       exception (maybe not needed, the parent function does
-            //       it already, it's just that the message is not as specific for this source)
-
-            // If now we have an IDP to route for, we set it up as the destination IdP
-            if($idp !== NULL && $idp != "")
-                // This value in the state overrides the value in the authsource config
-                $state['saml:idp'] = $idp;
+        // If the SP is routed to a specific IdP
+        if(array_key_exists($sp, $this->routes)){
+            $idp = $this->routes[$sp];
+            Logger::debug("[samlRouteSP] Found route from SP $sp to IDP $idp");
         }
+
+        // The 'route' seems like a valid string at least
+        if($idp !== NULL && $idp != "") {
+
+            // Check if the destination IDP is known to this proxy
+            $mdh = MetaDataStorageHandler::getMetadataHandler();
+            $matches = $mdh->getMetaDataForEntities([$idp], 'saml20-idp-remote');
+
+            // IDP in route unknown
+            if (empty($matches)) {
+                throw new NoSupportedIDP(
+                    Constants::STATUS_REQUESTER,
+                    "Routed IdP ($idp) for SP ($sp) is not supported by this proxy."
+                );
+            }
+
+            // Now we have an IDP to route for, we set it up as the destination IdP
+            // This value in the state overrides the value in the authsource config
+            // If it was called by an integrating app, it also overrides
+            // the 'saml:idp' value set on the parameters of the instance
+            $state['saml:idp'] = $idp;
+
+            Logger::debug("[samlRouteSP] SP $sp routed to IDP $idp");
+        }
+
+        // If there was no route, the common saml:SP  behaviour applies:
+        //  1. If instantiating app had $state['saml:idp'] set, that is used
+        //  2. If authsource config had 'idp' set, that is used
+        //  3. If AuthnReq had scoping (IDPList), intersection with saml20-idp-remote is calculated
+        //  4. If at this point a single idp entityID is left, go there
+        //  5. Else, discovery is called
 
         parent::authenticate($state);
     }
