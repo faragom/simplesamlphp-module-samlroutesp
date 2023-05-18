@@ -28,6 +28,16 @@ class samlRouteSP extends \SimpleSAML\Module\saml\Auth\Source\SP
 
 
     /**
+     * The IdP where to direct all SPs that don't have a speecific mapping.
+     *
+     * @var string|null  Had to add this parameter due to a weird
+     *                   implementation in SSP that prevents me from using
+     *                   'idp' parameter, which must be NULL when using this source.
+     */
+    private $default_idp;
+
+
+    /**
      * Constructor for SAML SP authentication source.
      *
      * @param array $info Information about this authentication source.
@@ -49,6 +59,9 @@ class samlRouteSP extends \SimpleSAML\Module\saml\Auth\Source\SP
 
         // We load the map of routes from the config, being routes[SPentityid] => [IDPentityID]
         $this->routes = $metadata->getArray('routes',[]);
+
+
+        $this->default_idp = $metadata->getString('default_idp',NULL);
     }
 
 
@@ -77,6 +90,12 @@ class samlRouteSP extends \SimpleSAML\Module\saml\Auth\Source\SP
         if(array_key_exists($sp, $this->routes)){
             $idp = $this->routes[$sp];
             Logger::debug("[samlRouteSP] Found route from SP $sp to IDP $idp");
+        }
+
+        // There was no route but we have a default
+        if($idp == NULL || $idp == "") {
+            $idp = $this->default_idp;
+            Logger::debug("[samlRouteSP] Using default route $idp for SP $sp");
         }
 
         // The 'route' seems like a valid string at least
